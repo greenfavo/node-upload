@@ -2,45 +2,20 @@ window.onload=function () {
 	var btn=document.getElementById('btn');
 	var file=document.getElementById('file');
 	file.addEventListener('change',function (e) {
-		handleFiles(file.files);//图片本地预览
+		handlePreview(file.files);//图片本地预览
+		handleUpload();		
 	},false);
 
 	btn.addEventListener('click',function (e) {
-		var progressBody=document.getElementsByClassName('progress')[0];
-		var progressBar=document.getElementsByClassName('bar')[0];
-		var msg=document.getElementById('msg');
-		var fd=new FormData();
-		fd.append('file',file.files[0]);
-
-
-		var xhr=new XMLHttpRequest();
-		progressBody.style.display='block';
-		//监听上传进度
-		(xhr.upload||xhr).addEventListener('progress',function (e) {
-			var done=e.position||e.loaded;
-			var total=e.totalSize||e.total;
-			var percent=Math.round(done/total*100)+'%';
-			progressBar.style.width = percent;
-			console.log('xhr progress: '+percent);
-		});
-		xhr.addEventListener('load',function (e) {
-			msg.innerText+='complete';
-			console.log('complete');
-		});
-		xhr.onreadystatechange=function () {
-			if (xhr.readyState===4 && xhr.status===200) {
-				var json=JSON.parse(xhr.responseText);
-				msg.innerText+=json.message;
-			}
+		if (file) {
+			file.click();//自定义上传按钮样式
 		}
-		xhr.open('post','/upload',true);
-		xhr.send(fd);
+		e.preventDefault();		
 	});
-
 }
 
-//显示图片缩略图
-function handleFiles(files) {
+//显示图片预览图
+function handlePreview(files) {
 	console.log(files);
 	for(var i=0;i<files.length;i++){
 		var file=files[i];
@@ -64,4 +39,37 @@ function handleFiles(files) {
 		reader.readAsDataURL(file);
 
 	}
+}
+
+//处理上传
+function  handleUpload() {
+	var progressBody=document.getElementsByClassName('progress')[0];
+	var progressBar=document.getElementsByClassName('bar')[0];
+	var msg=document.getElementById('msg');
+	var fd=new FormData();
+	fd.append('file',file.files[0]);
+
+	var xhr=new XMLHttpRequest();
+	progressBody.style.display='block';
+	msg.innerText='';
+	//监听上传进度
+	(xhr.upload||xhr).addEventListener('progress',function (e) {
+		var done=e.position||e.loaded;
+		var total=e.totalSize||e.total;
+		var percent=Math.round(done/total*100)+'%';
+		progressBar.style.width = percent;
+		console.log('xhr progress: '+percent);
+	});
+	xhr.addEventListener('load',function (e) {
+		msg.innerText+='complete';
+		console.log('complete');
+	});
+	xhr.onreadystatechange=function () {
+		if (xhr.readyState===4 && xhr.status===200) {
+			var json=JSON.parse(xhr.responseText);
+			msg.innerText+=json.message;
+		}
+	}
+	xhr.open('post','/upload',true);
+	xhr.send(fd);
 }
