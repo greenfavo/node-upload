@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<form enctype="multipart/form-data" id="uploadForm" >
+	<input type="file" name="file"  id="file" />
+	<button type="button" id="btn">上传</button>
+</form>
+<div id="msg">	
+</div>
+<div class="progress">
+	<div class="bar"></div>
+</div>
+<div class="preview"></div>
+{% endblock %}
+

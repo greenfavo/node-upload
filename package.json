@@ -1,0 +1,20 @@
+{
+  "name": "node-upload",
+  "version": "1.0.0",
+  "description": "a file upload test powered by nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "upload"
+  ],
+  "author": "nancyshi",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "formidable": "^1.0.17",
+    "swig": "^1.4.2"
+  }
+}
